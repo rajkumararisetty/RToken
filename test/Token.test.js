@@ -2,7 +2,7 @@ import {tokens, EVM_REVERT} from './helpers';
 const Token = artifacts.require("Token");
 require('chai').use(require('chai-as-promised')).should();
 
-contract('Token', ([deployer, sender, receiver]) => {
+contract('Token', ([deployer, exchanger, receiver]) => {
     let token;
     const name = 'R Token';
     const symbol = 'R';
@@ -56,14 +56,14 @@ contract('Token', ([deployer, sender, receiver]) => {
                 balanceOf.toString().should.equal(tokens(100).toString());
             });
 
-            it('emits a transfer event', async () => {
+            it('emits a Transfer event', async () => {
                 const log = result.logs[0];
                 log.event.should.equal('Transfer');
                 const event = log.args;
                 event.from.should.equal(deployer, 'from is correct');
                 event.to.should.equal(receiver, 'to is correct');
                 event.value.toString().should.equal(amount.toString(), 'Value is correct');
-            })
+            });
         });
 
         describe('Failure', async () => {
@@ -83,4 +83,36 @@ contract('Token', ([deployer, sender, receiver]) => {
             });
         });
 	});
+
+    describe('approving tokens', () => {
+        let result;
+        let amount;
+
+        describe('Success', () => {
+            beforeEach(async () => {
+                amount = tokens(100);
+                result = await token.approve(exchanger, amount, {from: deployer});
+            });
+
+            it('allocate an allowance for delegated token spending on exchange', async () => {
+                const allowance = await token.allowance(deployer, exchanger);
+                allowance.toString().should.equal(amount.toString());
+            });
+
+            it('emits t Approval event', async () => {
+                const log = result.logs[0];
+                log.event.should.equal('Approval');
+                const event = log.args;
+                event.owner.should.equal(deployer, 'owner is correct');
+                event.spender.should.equal(exchanger, 'spender is correct');
+                event.value.toString().should.equal(amount.toString(), 'Value is correct');
+            });
+        });
+
+        describe('Failure', () => {
+            it('reject invalid spenders', async () => {
+                await token.approve(0x0, amount, {from: deployer}).should.be.rejected;
+            })
+        });
+    });
 });

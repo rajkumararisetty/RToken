@@ -11,9 +11,11 @@ contract Token {
     uint256 public decimals = 18;
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
 
     // Events
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     constructor() public {
         totalSupply = 1000000 * (10 ** decimals);
@@ -28,4 +30,12 @@ contract Token {
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
+    // Approve tokens
+    function approve(address _spender, uint256 _value) public returns(bool success) {
+        require(_spender != address(0));
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+    // Transfer From
 }
