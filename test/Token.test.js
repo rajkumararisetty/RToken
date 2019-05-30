@@ -115,4 +115,54 @@ contract('Token', ([deployer, exchanger, receiver]) => {
             })
         });
     });
+
+    describe('deligarted tokens transfer', () => {
+        let result;
+        let amount;
+
+        beforeEach(async () => {
+            amount = tokens(100);
+            await token.approve(exchanger, amount, {from: deployer});
+        });
+
+        describe('Success', () => {
+            beforeEach(async () => {
+                result = await token.transferFrom(deployer, receiver, amount, {from: exchanger});
+            });
+
+            it('transfer token balances', async () => {
+                let balanceOf;
+                balanceOf = await token.balanceOf(deployer);
+                balanceOf.toString().should.equal(tokens(999900).toString());
+                balanceOf = await token.balanceOf(receiver);
+                balanceOf.toString().should.equal(amount.toString());
+            });
+
+            it('emits a Transfer event', async () => {
+                const log = result.logs[0];
+                log.event.should.equal('Transfer');
+                const event = log.args;
+                event.from.toString().should.equal(deployer, 'From is correct');
+                event.to.toString().should.equal(receiver, 'Receiver is correct');
+                event.value.toString().should.equal(amount.toString(), 'Value is correct');
+            });
+
+            it('resets the allowance', async () => {
+                const allowance = await token.allowance(deployer, exchanger);
+                allowance.toString().should.equal('0');
+            });
+        });
+
+        describe('failure', () => {
+            it('rejects insufficient amounts', async () => {
+                // Attempt transfer too many tokens
+                const invalidAmount = tokens(100000000);
+                await token.transferFrom(deployer, receiver, invalidAmount, {from: exchanger}).should.be.rejectedWith(EVM_REVERT);
+            });
+
+            it('rejects invalid recepient', async () => {
+                await token.transferFrom(deployer, 0x0, amount, {from: exchanger}).should.be.rejected;
+            });
+        });
+    });
 });
