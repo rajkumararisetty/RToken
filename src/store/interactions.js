@@ -1,7 +1,17 @@
 import Web3 from 'web3';
 import Token from '../abis/Token.json';
 import Exchange from '../abis/Exchange.json';
-import {web3Loaded, web3AccountLoaded, tokenLoaded, exchangeLoaded, cancelledOrdersLoaded, filledOrdersLoadeed, allOrdersLoadeed} from './actions.js';
+import {
+    web3Loaded,
+    web3AccountLoaded,
+    tokenLoaded,
+    exchangeLoaded,
+    cancelledOrdersLoaded,
+    filledOrdersLoadeed,
+    allOrdersLoadeed,
+    orderCancelling,
+    orderCancelled
+} from './actions.js';
 
 // Web3
 export const loadWeb3 = (dispatch) => {
@@ -53,4 +63,21 @@ export const loadAllOrders = async (exchange, dispatch) => {
     const orderStream = await exchange.getPastEvents('Order', {fromBlock: 0, toBlock: 'latest'});
     const allOrders = orderStream.map(event => event.returnValues);
     dispatch(allOrdersLoadeed(allOrders))
+}
+
+export const cancelOrder = (dispatch, exchange, orderId, account) => {
+    exchange.methods.cancelOrder(orderId).send({from: account})
+    .on('transactionHash', (hash) => {
+        dispatch(orderCancelling());
+    })
+    .on('error', (error) => {
+        console.log(error);
+        window.alert('There was an error!');
+    });
+}
+
+export const subscribeToEvents = async (exchange, dispatch) => {
+    exchange.events.orderCancel({}, (error, event) => {
+        dispatch(orderCancelled(event.returnValues));
+    });
 }

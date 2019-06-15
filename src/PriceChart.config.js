@@ -1,6 +1,6 @@
 export const chartOptions = {
   chart: {
-    animations: { enabled: true },
+    animations: { enabled: false },
     toolbar: { show: false },
     width: '100px'
   },

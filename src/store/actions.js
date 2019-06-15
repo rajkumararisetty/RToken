@@ -11,3 +11,7 @@ export const cancelledOrdersLoaded = (cancelledOrders) => ({type: 'CANCELLED_ORD
 export const filledOrdersLoadeed = (filledOrders) => ({type: 'FILLED_ORDERS_LOADED', filledOrders});
 
 export const allOrdersLoadeed = (allOrders) => ({type: 'ALL_ORDERS_LOADED', allOrders})
+
+export const orderCancelling = () => ({type: 'ORDER_CANCELLING'});
+
+export const orderCancelled = (order) => ({type: 'ORDER_CANCELLED', order});

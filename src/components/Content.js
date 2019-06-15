@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {loadAllOrders} from '../store/interactions';
+import {loadAllOrders, subscribeToEvents} from '../store/interactions';
 import {exchangeSelector} from '../store/selectors';
 import Trades from './Trades';
 import OrderBook from './OrderBook';
@@ -13,6 +13,7 @@ const Content = () => {
     useEffect(() => {
         const loadOrders = async () => {
             await loadAllOrders(exchange, dispatch);
+            await subscribeToEvents(exchange, dispatch)
         }
 
         loadOrders();

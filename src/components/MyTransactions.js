@@ -1,12 +1,16 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {Tabs, Tab} from 'react-bootstrap';
 import {
     myFilledOrdersLoadedSelector, 
     myFilledOrdersSelector, 
     myOpenOrdersLoadedSelector, 
-    myOpenOrderSelector
+    myOpenOrderSelector,
+    exchangeSelector,
+    accountSelector,
+    orderCancellingSelector
 } from '../store/selectors';
+import {cancelOrder} from '../store/interactions';
 import Spinner from './Spinner';
 
 const createMyFilledOrders = (orders) => {
@@ -25,7 +29,7 @@ const createMyFilledOrders = (orders) => {
     );
 }
 
-const createMyOpenOrders = (orders) => {
+const createMyOpenOrders = (orders, dispatch, exchange, account) => {
     return (
         <tbody>
             {orders.map(order => {
@@ -33,7 +37,10 @@ const createMyOpenOrders = (orders) => {
                     <tr key={order.id}>
                         <td className={`text-${order.orderTypeClass}`}>{order.tokenAmount}</td>
                         <td className={`text-${order.orderTypeClass}`}>{order.tokenPrice}</td>
-                        <td className="text-muted">x</td>
+                        <td 
+                        className="text-muted cancel-order"
+                        onClick={() => cancelOrder(dispatch, exchange, order.id, account)}
+                        >X</td>
                     </tr>
                 )
             })}
@@ -42,10 +49,14 @@ const createMyOpenOrders = (orders) => {
 }
 
 const MyTransactions = () => {
+    const dispatch = useDispatch();
+    const exchange = useSelector(exchangeSelector);
+    const account = useSelector(accountSelector);
     const showMyFilledOrders = useSelector(myFilledOrdersLoadedSelector);
     const myFilledOrders = useSelector(myFilledOrdersSelector);
     const showMyOpenOrders = useSelector(myOpenOrdersLoadedSelector);
     const myOpenOrders = useSelector(myOpenOrderSelector);
+    const orderCancellingStatus = useSelector(orderCancellingSelector);
     return (
         <div className="card bg-dark text-white">
             <div className="card-header">
@@ -74,7 +85,7 @@ const MyTransactions = () => {
                                     <th>Cancel</th>
                                 </tr>
                             </thead>
-                            {showMyOpenOrders ? createMyOpenOrders(myOpenOrders) : <Spinner type="table" />}
+                            {(showMyOpenOrders && !orderCancellingStatus) ? createMyOpenOrders(myOpenOrders, dispatch, exchange, account) : <Spinner type="table" />}
                         </table>
                     </Tab>
                 </Tabs>
