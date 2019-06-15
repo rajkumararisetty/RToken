@@ -14,7 +14,6 @@ const renderOrder = (order) => {
 }
 
 const constructOrderBook = (orderBook) => {
-    console.log(orderBook);
     return (
         <tbody>
             {orderBook.sellOrders.map(order => renderOrder(order))}

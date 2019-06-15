@@ -25,11 +25,11 @@ export const allOrdersLoadedSelector = createSelector(allOrdersLoaded, aol => ao
 const allOrders = state => get(state, 'exchange.allOrders.data', []);
 
 // Cancelled orders
-const cancelledOrdersLoaded = state => get(state, 'exchange.canelledOrders.loaded', false);
+const cancelledOrdersLoaded = state => get(state, 'exchange.cancelledOrders.loaded', false);
 export const cancelledOrdersLoadedSelector = createSelector(cancelledOrdersLoaded, col => col);
 
-const cancelledOrders = state => get(state, 'exchange.canelledOrders.data', []);
-export const canelledOrdersSelector = createSelector(cancelledOrders, o => o);
+const cancelledOrders = state => get(state, 'exchange.cancelledOrders.data', []);
+export const cancelledOrdersSelector = createSelector(cancelledOrders, o => o);
 
 // Fillded order
 const filledOrdersLoaded = state => get(state, 'exchange.filledOrders.loaded', false);
@@ -59,6 +59,7 @@ const decorateFilledOrders = (orders) => {
 const decorateOrder = (order) => {
     let etherAmount;
     let tokenAmount;
+    // buy order
     if (order.tokenGive === ETHER_ADDRESS) {
         etherAmount = order.amountGive;
         tokenAmount = order.amountGet;
