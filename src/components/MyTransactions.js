@@ -46,8 +46,6 @@ const MyTransactions = () => {
     const myFilledOrders = useSelector(myFilledOrdersSelector);
     const showMyOpenOrders = useSelector(myOpenOrdersLoadedSelector);
     const myOpenOrders = useSelector(myOpenOrderSelector);
-    console.log(myFilledOrders);
-    console.log(myOpenOrders);
     return (
         <div className="card bg-dark text-white">
             <div className="card-header">
