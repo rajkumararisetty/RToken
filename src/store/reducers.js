@@ -21,6 +21,7 @@ const token = (state = {}, action) => {
 };
 
 const exchange = (state={}, action) => {
+    let index;
     switch (action.type) {
         case 'EXCHANGE_LOADED':
             return {...state, loaded: true, contract: action.contract};
@@ -44,6 +45,26 @@ const exchange = (state={}, action) => {
                     ]
                 }
             }
+        case 'ORDER_FILLING':
+            return {...state, fillingOrder: true}
+        case 'ORDER_FILLED':
+            // Prevent duplicate orders
+            index = state.filledOrders.data.findIndex(order => order.id === action.order.id);
+            if (index === -1) {
+                return {
+                    ...state,
+                    fillingOrder: false,
+                    filledOrders: {
+                        ...state.filledOrders,
+                        data: [
+                            ...state.filledOrders.data,
+                            action.order
+                        ]
+                    }
+                }
+            }
+
+            return state;
         default:
             return state;
     }

@@ -10,7 +10,9 @@ import {
     filledOrdersLoadeed,
     allOrdersLoadeed,
     orderCancelling,
-    orderCancelled
+    orderCancelled,
+    orderFilling,
+    orderFilled
 } from './actions.js';
 
 // Web3
@@ -65,6 +67,16 @@ export const loadAllOrders = async (exchange, dispatch) => {
     dispatch(allOrdersLoadeed(allOrders))
 }
 
+export const subscribeToEvents = async (exchange, dispatch) => {
+    exchange.events.orderCancel({}, (error, event) => {
+        dispatch(orderCancelled(event.returnValues));
+    });
+
+    exchange.events.Trade({}, (error, event) => {
+        dispatch(orderFilled(event.returnValues));
+    });
+}
+
 export const cancelOrder = (dispatch, exchange, orderId, account) => {
     exchange.methods.cancelOrder(orderId).send({from: account})
     .on('transactionHash', (hash) => {
@@ -72,12 +84,17 @@ export const cancelOrder = (dispatch, exchange, orderId, account) => {
     })
     .on('error', (error) => {
         console.log(error);
-        window.alert('There was an error!');
+        window.alert('There was an error in cancelling order!');
     });
 }
 
-export const subscribeToEvents = async (exchange, dispatch) => {
-    exchange.events.orderCancel({}, (error, event) => {
-        dispatch(orderCancelled(event.returnValues));
+export const fillOrder = (dispatch, exchange, orderId, account) => {
+    exchange.methods.fillOrder(orderId).send({from: account})
+    .on('transactionHash', (hash) => {
+        dispatch(orderFilling());
+    })
+    .on('error', (error) => {
+        console.log(error);
+        window.alert('There was an error in filling order!');
     });
 }
