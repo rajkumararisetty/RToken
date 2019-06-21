@@ -39,3 +39,20 @@ export const etherWithdrawAmountChange = (amount) => ({type: 'ETHER_WITHDRAW_AMO
 export const tokenDepositAmountChange = (amount) => ({type: 'TOKEN_DEPOSIT_AMOUNT_CHANGE', amount});
 
 export const tokenWithdrawAmountChange = (amount) => ({type: 'TOKEN_WITHDRAW_AMOUNT_CHANGE', amount});
+
+// Buy Order
+export const buyOrderAmountChanged = (amount) => ({type: 'BUY_ORDER_AMOUNT_CHANGE', amount});
+
+export const buyOrderPriceChanged = (price) => ({type: 'BUY_ORDER_PRICE_CHANGE', price});
+
+export const buyOrderMaking = (price) => ({type: 'BUY_ORDER_MAKING', price});
+
+// Geniric order
+export const orderMade = (order) => ({type: 'ORDER_MADE', order});
+
+// Sell Order
+export const sellOrderAmountChanged = (amount) => ({type: 'SELL_ORDER_AMOUNT_CHANGE', amount});
+
+export const sellOrderPriceChanged = (price) => ({type: 'SELL_ORDER_PRICE_CHANGE', price});
+
+export const sellOrderMaking = (price) => ({type: 'SELL_ORDER_MAKING', price});
