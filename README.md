@@ -20,7 +20,7 @@ Install:
 ### Steps for dev mode:
 ```sol
 Ganache:
-	cd ganache
+    cd ganache
     npm install
     npm start
 
@@ -29,7 +29,7 @@ trufflr commands:
     truffle exec scripts/seed-exchange.js
 
 R Token:
-	git clone https://github.com/rajkumararisetty/RToken.git
+    git clone https://github.com/rajkumararisetty/RToken.git
     cd RToken
     npm install
     npm start
