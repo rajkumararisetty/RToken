@@ -37,7 +37,7 @@ R Token:
 
 ### Packages:
 ```pack
-	Truffle(Framework for Dapp development in ethereum)
+    Truffle(Framework for Dapp development in ethereum)
     React
     Redux
     apexcharts
