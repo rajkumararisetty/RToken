@@ -3,7 +3,7 @@
 #### Prerequisite tools:
 ``` tools
 Install: 
-	node
+    node
     npm
     Note: Better install to nvm(Node Version Manager)
  	Ref: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-18-04
@@ -20,7 +20,7 @@ Install:
 ### Steps for dev mode:
 ```sol
 Ganache:
-	cd ganache
+    cd ganache
     npm install
     npm start
 
@@ -29,7 +29,7 @@ trufflr commands:
     truffle exec scripts/seed-exchange.js
 
 R Token:
-	git clone https://github.com/rajkumararisetty/RToken.git
+    git clone https://github.com/rajkumararisetty/RToken.git
     cd RToken
     npm install
     npm start
@@ -37,7 +37,7 @@ R Token:
 
 ### Packages:
 ```pack
-	Truffle(Framework for Dapp development in ethereum)
+    Truffle(Framework for Dapp development in ethereum)
     React
     Redux
     apexcharts
